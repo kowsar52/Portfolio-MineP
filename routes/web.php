@@ -8,17 +8,10 @@ use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\ProfileSettingsController;
 use App\Http\Controllers\Admin\EmailController;
-use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\FAQController;
-use App\Http\Controllers\Admin\ClientController;
-use App\Http\Controllers\Admin\MemberController;
 use App\Http\Controllers\Admin\PageController;
-use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\ThemeManagementController;
 use App\Http\Controllers\Admin\SliderImageController;
 use App\Http\Controllers\Admin\ServiceController;
-use App\Http\Controllers\Admin\FunFactsController;
-use App\Http\Controllers\Admin\TestimonialController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,16 +31,8 @@ Route::post('/forget/password',[AuthController::class, 'fotgetPasswordSubmit']);
 Route::get('/reset-password/{token}',[AuthController::class, 'resetPassPageShow'])->name('password.reset');
 Route::post('/reset-password/submit',[AuthController::class, 'resetPasswordSubmit'])->name('password.update');
 
-Route::get('/contact',[FrontendController::class, 'contactPageShow']);
-Route::get('/about',[FrontendController::class, 'aboutPageShow']);
-Route::get('/faq', [FrontendController::class, 'faqPageShow']);
-Route::get('/projects', [FrontendController::class, 'projectsPageShow']);
-Route::get('/project/{id}', [FrontendController::class, 'projectDetailsPageShow']);
 
 Route::post('/contact-form-data/save',[FrontendController::class, 'contactFromDataSave']);
-
-##### NewsLetter Subscribe ######
-Route::post('/newsletter',[FrontendController::class, 'newsletter']);
 
 
 Route::get('/', [FrontendController::class, 'index']);
@@ -69,11 +54,6 @@ Route::middleware('auth')->prefix('admin')->group(function(){
     Route::post('/pages/update', [PageController::class, 'updatePage'])->name('admin.page.update');
     Route::get('/pages/delete/{id}', [PageController::class, 'delete'])->name('admin.page.delete');
 
-    ######## FAQ ########
-    Route::get('/all-faqs', [FAQController::class,'index'])->name('admin.faq');
-    Route::get('/faqs/get-faq/{id}', [FAQController::class,'getFaq'])->name('admin.faq.get');
-    Route::post('/faqs/save', [FAQController::class,'save'])->name('admin.faq.save');
-    Route::get('/faqs/delete/{id}', [FAQController::class,'delete'])->name('admin.faq.delete');
 
     ######## SLIDER IMAGES ########
     Route::get('/slider-images', [SliderImageController::class,'index'])->name('admin.slider-images');
@@ -92,12 +72,6 @@ Route::middleware('auth')->prefix('admin')->group(function(){
     Route::get('/theme-settings/{page}', [ThemeManagementController::class,'index'])->name('admin.theme-management');
     Route::post('/theme/save-settings/{page}', [ThemeManagementController::class,'saveSetting'])->name('admin.theme.save');
 
-    ######## fun-facts ########
-    Route::get('/fun-facts', [FunFactsController::class,'index'])->name('admin.fun-facts');
-    Route::get('fun-facts/{id}', [FunFactsController::class,'get'])->name('admin.fun-facts.get');
-    Route::post('fun-facts/save', [FunFactsController::class,'save'])->name('admin.fun-facts.save');
-    Route::get('fun-facts/delete/{id}', [FunFactsController::class,'delete'])->name('admin.fun-facts.delete');
-
         
     ###### Contact #########
     Route::get('/contact/contact-list', [ContactController::class, 'index'])->name('admin.contact-list');
@@ -107,61 +81,6 @@ Route::middleware('auth')->prefix('admin')->group(function(){
     Route::get('/all-settings/{type}', [SettingsController::class,'getSetting'])->name('admin.settings.type');
     Route::post('/save-settings', [SettingsController::class,'saveSetting'])->name('admin.settings.save');
 
-
-    ############## Email templates ##############
-    Route::get('/email-templates', [EmailController::class,'index'])->name('admin.email.template');
-    Route::get('/email-template/{id}', [EmailController::class,'edit']);
-    Route::post('/email-template/update', [EmailController::class,'emailTemplateUpdate']);
-
-
-
-    ############## Category #############
-    Route::get('/categories', [CategoryController::class, 'index'])->name('admin.categories');
-    Route::post('/categories/save', [CategoryController::class, 'save'])->name('admin.categories.save');
-    Route::get('/categories/{id}', [CategoryController::class, 'getCategory'])->name('admin.categories.get');
-    Route::get('/categories/delete/{id}', [CategoryController::class, 'delete'])->name('admin.categories.delete');
-
-
-    ############## Project #############
-    Route::get('/projects', [ProjectController::class, 'index'])->name('admin.projects');
-    Route::post('/projects/save', [ProjectController::class, 'save'])->name('admin.projects.save');
-    Route::get('/projects/{id}', [ProjectController::class, 'getCategory'])->name('admin.projects.get');
-    Route::get('/projects/delete/{id}', [ProjectController::class, 'delete'])->name('admin.projects.delete');
-
-    ############## Testimonial #############
-    Route::get('/testimonials', [TestimonialController::class, 'index'])->name('admin.testimonials');
-    Route::post('/testimonials/save', [TestimonialController::class, 'save'])->name('admin.testimonials.save');
-    Route::get('/testimonials/{id}', [TestimonialController::class, 'getCategory'])->name('admin.testimonials.get');
-    Route::get('/testimonials/delete/{id}', [TestimonialController::class, 'delete'])->name('admin.testimonials.delete');
-
-    ############## Service Types #############
-    Route::get('/service-types', 'ServiceTypesController@index')->name('admin.service-types');
-    Route::post('/service-types/save', 'ServiceTypesController@save')->name('admin.service-types.save');
-    Route::get('/service-types/get/{id}', 'ServiceTypesController@getServiceType')->name('admin.service-types.get');
-    Route::get('/service-types/delete/{id}', 'ServiceTypesController@delete')->name('admin.service-types.delete');
-
-    ######## LOVING CLIENTS ########
-    Route::get('/clients', [ClientController::class,'index'])->name('admin.clients');
-    Route::get('/clients/{id}', [ClientController::class,'getClientLogo'])->name('admin.clients.get');
-    Route::post('/clients/save', [ClientController::class,'save'])->name('admin.clients.save');
-    Route::get('/clients/delete/{id}', [ClientController::class,'delete'])->name('admin.clients.delete');
-    
-    ######## LOVING CLIENTS ########
-    Route::get('/members', [MemberController::class,'index'])->name('admin.members');
-    Route::get('/members/{id}', [MemberController::class,'getMember'])->name('admin.members.get');
-    Route::post('/members/save', [MemberController::class,'save'])->name('admin.members.save');
-    Route::get('/members/delete/{id}', [MemberController::class,'delete'])->name('admin.members.delete');
-
-
-
-
-
-    ###### Review #########
-    Route::get('/reviews/all-review', 'ReviewController@index')->name('admin.all-review');
-    Route::get('/review/change-status/{id}', 'ReviewController@changeStatus')->name('admin.review.status');
-
-    ############ Newsletter #############
-    Route::get('newsletter/newsletter-list','NewsletterController@index')->name('admin.newsletter');
 });
 
 

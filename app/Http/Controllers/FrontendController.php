@@ -3,15 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Page;
-use App\Models\Client;
-use App\Models\Member;
 use App\Models\Contact;
-use App\Models\FunFact;
-use App\Models\Project;
 use App\Models\Service;
-use App\Models\Newsletter;
 use App\Models\SliderImage;
-use App\Models\Testimonial;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -23,18 +17,10 @@ class FrontendController extends Controller
        
         $slider_images = SliderImage::get();
         $services  = Service::where('language',\App::getLocale())->get();
-        $projects  = Project::where('status',1)->where('language',\App::getLocale())->get();
-        $testimonials  = Testimonial::where('status',1)->where('language',\App::getLocale())->get();
-        $fun_facts = FunFact::where('language', \App::getLocale())->get();
-        $clients = Client::where('language', \App::getLocale())->get();
         
-        return view('index',compact('slider_images','services','projects','testimonials', 'fun_facts', 'clients'));
+        return view('index',compact('slider_images','services'));
     }
 
-    //contactPageShow
-    public function contactPageShow(){
-        return view('contact');
-    }
 
     //contact From Data Save
     public function contactFromDataSave(Request $request)
@@ -70,35 +56,7 @@ class FrontendController extends Controller
             }
         }
     }
-    
-    //aboutPageShow
-    public function aboutPageShow(){
 
-        $fun_facts = FunFact::where('language', \App::getLocale())->get();
-        $clients = Client::where('language', \App::getLocale())->get();
-        $members = Member::where('language', \App::getLocale())->get();
-        $testimonials  = Testimonial::where('status',1)->where('language',\App::getLocale())->get();
-
-        return view('about', compact('fun_facts', 'clients', 'members','testimonials'));
-    }
-    //portfolioPageShow
-    public function projectsPageShow(){
-        $projects = Project::orderBy('created_at','desc')->paginate(12);
-        return view('projects',compact('projects'));
-    }
-    //portfolioDetailsPageShow
-    public function projectDetailsPageShow($id){
-        $project = Project::findOrFail($id);
-        return view('project-details',compact('project'));
-    }
-    //faqPageShow
-    public function faqPageShow(){
-        return view('faq');
-    }
-    //servicePageShow
-    public function servicesPageShow(){
-        return view('services');
-    }
 
     //get dynamic page
     public function getPage($slug){
@@ -115,31 +73,6 @@ class FrontendController extends Controller
 
     }
 
-    public function newsletter(Request $request)
-    {
-        //dd($request->all());
-        $validator = Validator::make($request->all(), [
-            'EMAIL' => 'required|email|unique:newsletters',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'errors' => $validator->errors()
-            ], 200);
-        } else {
-            $newsletter = new Newsletter();
-            $newsletter->ip_address = $request->ip();
-            $newsletter->email = $request->EMAIL;
-
-            if($newsletter->save()){
-                return response()->json([
-                    'success' => true,
-                    'message' => __('Thanks for subscribe us')
-                ]);
-            }
-        }
-
-    }
+    
  
 }
